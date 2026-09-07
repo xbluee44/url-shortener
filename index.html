@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔗 ShortLink - URL Shortener Premium</title>
+    <title>🚀 HTML to URL - Deploy HTML instantly</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,7 @@
             color: #e0e0ff;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             padding: 20px;
         }
@@ -25,21 +25,27 @@
         .container {
             max-width: 900px;
             width: 100%;
+            background: rgba(20, 20, 40, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #2d3748;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
         /* Header */
         .header {
             text-align: center;
-            padding: 40px 0 30px;
+            margin-bottom: 30px;
         }
 
         .logo {
-            font-size: 48px;
+            font-size: 56px;
             margin-bottom: 10px;
+            display: block;
         }
 
         .header h1 {
-            font-size: 36px;
+            font-size: 32px;
             background: linear-gradient(135deg, #a78bfa, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -48,25 +54,966 @@
         .header p {
             color: #94a3b8;
             margin-top: 8px;
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #2d3748;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2d3748;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .step.done .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: #a78bfa;
+        }
+
+        .step.done .step-label {
+            color: #10b981;
+        }
+
+        /* Steps Content */
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #2d3748;
+            border-radius: 16px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .upload-area:hover {
+            border-color: #4f46e5;
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #a78bfa;
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: #94a3b8;
             font-size: 16px;
         }
 
-        /* Form */
-        .form-card {
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid #2d3748;
-            margin-bottom: 20px;
+        .upload-text strong {
+            color: #a78bfa;
         }
 
-        .input-group {
+        .file-info {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: left;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-info .name {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .file-info .size {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Domain Input */
+        .domain-input-group {
             display: flex;
             gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
         }
 
-        .input-group input {
+        .domain-input-group input {
             flex: 1;
+            padding: 16px 20px;
+            background: #0f0f1a;
+            border: 2px solid #2d3748;
+            border-radius: 12px;
+            color: #e0e0ff;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        .domain-input-group input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .domain-input-group select {
+            padding: 16px 20px;
+            background: #0f0f1a;
+            border: 2px solid #2d3748;
+            border-radius: 12px;
+            color: #e0e0ff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: #2d3748;
+            color: #e0e0ff;
+        }
+
+        .btn-secondary:hover {
+            background: #3d4758;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Result */
+        .result-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-box .label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .result-box .url {
+            font-size: 22px;
+            font-weight: 600;
+            color: #10b981;
+            word-break: break-all;
+            margin: 8px 0;
+        }
+
+        .result-box .url a {
+            color: #10b981;
+            text-decoration: none;
+        }
+
+        .result-box .url a:hover {
+            text-decoration: underline;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Preview */
+        .preview-frame {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            background: white;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .preview-frame.show {
+            display: block;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .toast.info {
+            background: #3b82f6;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* History */
+        .history-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background: rgba(30, 30, 50, 0.5);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .history-item .link {
+            color: #a78bfa;
+            font-size: 14px;
+            word-break: break-all;
+            flex: 1;
+        }
+
+        .history-item .link a {
+            color: #a78bfa;
+            text-decoration: none;
+        }
+
+        .history-item .link a:hover {
+            text-decoration: underline;
+        }
+
+        .history-item .time {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .steps {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .steps::before {
+                display: none;
+            }
+            .step {
+                flex-direction: row;
+                gap: 12px;
+            }
+            .domain-input-group {
+                flex-direction: column;
+            }
+            .upload-area {
+                padding: 40px 20px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <span class="logo">🚀</span>
+            <h1>HTML to URL Deployer</h1>
+            <p>Upload HTML file, get a live URL instantly</p>
+        </div>
+
+        <!-- Steps -->
+        <div class="steps">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Upload HTML</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Configure Domain</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Get URL</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Upload -->
+        <div class="step-content active" id="stepContent1">
+            <h2 style="margin-bottom:16px;">📤 Upload HTML File</h2>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">
+                    <strong>Drop your HTML file here</strong> or click to browse<br>
+                    <span style="font-size:12px;color:#6b7280;">Supports: .html, .htm, .xhtml</span>
+                </div>
+                <input type="file" id="fileInput" accept=".html,.htm,.xhtml" style="display:none;">
+            </div>
+
+            <div class="file-info" id="fileInfo">
+                <div>
+                    <span class="name" id="fileName">index.html</span>
+                    <span class="size" id="fileSize"> - 0 KB</span>
+                </div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn btn-secondary" onclick="previewFile()">👁️ Preview</button>
+                    <button class="btn btn-danger" onclick="removeFile()">🗑️ Remove</button>
+                </div>
+            </div>
+
+            <div class="preview-frame" id="previewFrame"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="continueBtn" disabled onclick="goToStep2()">
+                    Continue → 
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Domain -->
+        <div class="step-content" id="stepContent2">
+            <h2 style="margin-bottom:16px;">🌐 Configure Domain</h2>
+            
+            <p style="color:#94a3b8;margin-bottom:16px;">
+                Choose your domain name for the deployed HTML file.
+            </p>
+
+            <div class="domain-input-group">
+                <input type="text" id="domainInput" placeholder="my-website" value="my-awesome-page">
+                <select id="domainExtension">
+                    <option value=".vercel.app">.vercel.app</option>
+                    <option value=".github.io">.github.io</option>
+                    <option value=".netlify.app">.netlify.app</option>
+                    <option value=".surge.sh">.surge.sh</option>
+                    <option value=".render.com">.render.com</option>
+                    <option value=".herokuapp.com">.herokuapp.com</option>
+                    <option value=".glitch.me">.glitch.me</option>
+                    <option value=".replit.app">.replit.app</option>
+                    <option value=".onrender.com">.onrender.com</option>
+                    <option value=".cyclic.app">.cyclic.app</option>
+                    <option value=".koyeb.app">.koyeb.app</option>
+                    <option value=".fly.dev">.fly.dev</option>
+                    <option value=".railway.app">.railway.app</option>
+                </select>
+            </div>
+
+            <div style="background:rgba(79,70,229,0.1);border-radius:12px;padding:16px;border:1px solid rgba(79,70,229,0.2);">
+                <span style="color:#6b7280;">Your URL will be:</span>
+                <div style="font-size:20px;font-weight:600;color:#a78bfa;margin-top:4px;" id="previewUrl">
+                    https://my-awesome-page.vercel.app
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="goToStep1()">← Back</button>
+                <button class="btn btn-success" onclick="deploy()">
+                    🚀 Deploy Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Result -->
+        <div class="step-content" id="stepContent3">
+            <h2 style="margin-bottom:16px;">🎉 Deployed Successfully!</h2>
+
+            <div class="result-box show">
+                <div class="label">Your URL is ready:</div>
+                <div class="url" id="deployedUrl">
+                    <a href="#" target="_blank" id="deployedLink">https://my-awesome-page.vercel.app</a>
+                </div>
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="copyDeployedUrl()">📋 Copy URL</button>
+                    <button class="btn btn-success" onclick="openDeployedUrl()">🚀 Open</button>
+                    <button class="btn btn-secondary" onclick="goToStep1()">🔄 Deploy Another</button>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <h3 style="margin-bottom:12px;">📊 Deployment History</h3>
+                <div class="history-list" id="historyList">
+                    <p style="color:#6b7280;text-align:center;padding:20px;">
+                        No deployments yet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 🚀 HTML to URL DEPLOYER - Full JavaScript
+        // ============================================================
+
+        // State
+        let uploadedFile = null;
+        let fileContent = '';
+        let currentStep = 1;
+        let deployments = [];
+        let isDeploying = false;
+
+        // Load saved deployments
+        function loadDeployments() {
+            try {
+                const saved = localStorage.getItem('html_deployments');
+                if (saved) {
+                    deployments = JSON.parse(saved);
+                    renderHistory();
+                }
+            } catch (e) {}
+        }
+
+        // Save deployments
+        function saveDeployments() {
+            try {
+                localStorage.setItem('html_deployments', JSON.stringify(deployments));
+            } catch (e) {}
+        }
+
+        // ============================================================
+        // STEP 1: UPLOAD
+        // ============================================================
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const continueBtn = document.getElementById('continueBtn');
+        const previewFrame = document.getElementById('previewFrame');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Handle file
+        function handleFile(file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!['html', 'htm', 'xhtml'].includes(ext)) {
+                showToast('Please upload an HTML file (.html, .htm, .xhtml)', 'error');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('File too large. Max size: 5MB', 'error');
+                return;
+            }
+
+            uploadedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = ` - ${(file.size / 1024).toFixed(1)} KB`;
+            fileInfo.classList.add('show');
+            continueBtn.disabled = false;
+            uploadArea.style.borderColor = '#10b981';
+
+            // Read file content
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fileContent = e.target.result;
+                showToast('File uploaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+
+        // Remove file
+        function removeFile() {
+            uploadedFile = null;
+            fileContent = '';
+            fileInfo.classList.remove('show');
+            continueBtn.disabled = true;
+            uploadArea.style.borderColor = '#2d3748';
+            previewFrame.classList.remove('show');
+            previewFrame.innerHTML = '';
+            fileInput.value = '';
+        }
+
+        // Preview file
+        function previewFile() {
+            if (!fileContent) {
+                showToast('No file to preview', 'error');
+                return;
+            }
+            previewFrame.classList.add('show');
+            previewFrame.innerHTML = fileContent;
+        }
+
+        // Go to Step 2
+        function goToStep2() {
+            if (!uploadedFile) {
+                showToast('Please upload an HTML file first', 'error');
+                return;
+            }
+            setStep(2);
+            updatePreviewUrl();
+        }
+
+        // ============================================================
+        // STEP 2: DOMAIN
+        // ============================================================
+
+        const domainInput = document.getElementById('domainInput');
+        const domainExtension = document.getElementById('domainExtension');
+        const previewUrl = document.getElementById('previewUrl');
+
+        // Update preview URL
+        function updatePreviewUrl() {
+            const name = domainInput.value.trim() || 'my-page';
+            const ext = domainExtension.value;
+            const url = `https://${name}${ext}`;
+            previewUrl.textContent = url;
+        }
+
+        domainInput.addEventListener('input', updatePreviewUrl);
+        domainExtension.addEventListener('change', updatePreviewUrl);
+
+        // Generate random name
+        function generateRandomName() {
+            const adjectives = ['awesome', 'cool', 'amazing', 'great', 'super', 'mega', 'ultra', 'epic'];
+            const nouns = ['page', 'site', 'web', 'app', 'hub', 'zone', 'space', 'world'];
+            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const noun = nouns[Math.floor(Math.random() * nouns.length)];
+            const num = Math.floor(Math.random() * 1000);
+            return `${adj}-${noun}-${num}`;
+        }
+
+        // ============================================================
+        // STEP 3: DEPLOY
+        // ============================================================
+
+        function deploy() {
+            if (isDeploying) return;
+            if (!uploadedFile || !fileContent) {
+                showToast('No file to deploy', 'error');
+                return;
+            }
+
+            const name = domainInput.value.trim() || generateRandomName();
+            const ext = domainExtension.value;
+            const fullUrl = `https://${name}${ext}`;
+
+            // Validate domain name
+            if (!/^[a-z0-9-]+$/.test(name.toLowerCase())) {
+                showToast('Domain name can only contain lowercase letters, numbers, and hyphens', 'error');
+                return;
+            }
+
+            isDeploying = true;
+            const deployBtn = document.querySelector('#stepContent2 .btn-success');
+            const originalText = deployBtn.innerHTML;
+            deployBtn.innerHTML = '<span class="loading"></span> Deploying...';
+            deployBtn.disabled = true;
+
+            // Simulate deployment
+            setTimeout(() => {
+                // Create deployment record
+                const deployment = {
+                    id: Date.now(),
+                    name: name,
+                    domain: ext,
+                    url: fullUrl,
+                    content: fileContent,
+                    filename: uploadedFile.name,
+                    size: uploadedFile.size,
+                    createdAt: new Date().toISOString()
+                };
+
+                deployments.unshift(deployment);
+                saveDeployments();
+
+                // Show result
+                document.getElementById('deployedLink').textContent = fullUrl;
+                document.getElementById('deployedLink').href = '#';
+                document.getElementById('deployedUrl').querySelector('.url a').href = '#';
+                
+                // Store current URL for copy/open
+                window._deployedUrl = fullUrl;
+                window._deployedContent = fileContent;
+
+                setStep(3);
+                renderHistory();
+
+                showToast('🚀 Deployed successfully!', 'success');
+
+                deployBtn.innerHTML = originalText;
+                deployBtn.disabled = false;
+                isDeploying = false;
+
+                // Add click to open
+                document.querySelector('#deployedUrl .url a').onclick = function(e) {
+                    e.preventDefault();
+                    openDeployedUrl();
+                };
+
+            }, 1500);
+        }
+
+        // Copy deployed URL
+        function copyDeployedUrl() {
+            const url = window._deployedUrl;
+            if (!url) {
+                showToast('No URL to copy', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('✅ URL copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ URL copied!', 'success');
+            });
+        }
+
+        // Open deployed URL
+        function openDeployedUrl() {
+            const url = window._deployedUrl;
+            if (!url) {
+                showToast('No URL to open', 'error');
+                return;
+            }
+            // Create a new tab with the content
+            const win = window.open('', '_blank');
+            if (win) {
+                win.document.write(window._deployedContent);
+                win.document.title = uploadedFile ? uploadedFile.name : 'Deployed Page';
+                win.document.close();
+            } else {
+                showToast('Please allow popups', 'error');
+            }
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+
+        function setStep(step) {
+            currentStep = step;
+            
+            // Update steps UI
+            document.querySelectorAll('.step').forEach((el, index) => {
+                el.classList.remove('active', 'done');
+                if (index + 1 < step) el.classList.add('done');
+                if (index + 1 === step) el.classList.add('active');
+            });
+
+            // Update content
+            document.querySelectorAll('.step-content').forEach((el, index) => {
+                el.classList.toggle('active', index + 1 === step);
+            });
+
+            // Scroll to top
+            document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goToStep1() {
+            setStep(1);
+        }
+
+        // ============================================================
+        // HISTORY
+        // ============================================================
+
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            
+            if (deployments.length === 0) {
+                list.innerHTML = '<p style="color:#6b7280;text-align:center;padding:20px;">No deployments yet.</p>';
+                return;
+            }
+
+            list.innerHTML = deployments.map(d => `
+                <div class="history-item">
+                    <div class="link">
+                        <a href="#" onclick="viewDeployment('${d.id}')">${d.url}</a>
+                    </div>
+                    <div>
+                        <span style="color:#6b7280;font-size:12px;">${new Date(d.createdAt).toLocaleString()}</span>
+                        <span style="margin-left:8px;color:#6b7280;font-size:12px;">${(d.size/1024).toFixed(1)} KB</span>
+                        <button onclick="deleteDeployment('${d.id}')" style="margin-left:8px;background:#ef4444;color:white;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewDeployment(id) {
+            const deployment = deployments.find(d => d.id === parseInt(id));
+            if (deployment) {
+                window._deployedUrl = deployment.url;
+                window._deployedContent = deployment.content;
+                document.getElementById('deployedLink').textContent = deployment.url;
+                document.getElementById('deployedLink').href = '#';
+                document.querySelector('#deployedUrl .url a').href = '#';
+                document.querySelector('#deployedUrl .url a').onclick = function(e) {
+                    e.preventDefault();
+                    openDeployedUrl();
+                };
+                setStep(3);
+                showToast('📂 Loaded deployment', 'info');
+            }
+        }
+
+        function deleteDeployment(id) {
+            if (confirm('Delete this deployment?')) {
+                deployments = deployments.filter(d => d.id !== parseInt(id));
+                saveDeployments();
+                renderHistory();
+                showToast('🗑️ Deployment deleted', 'info');
+            }
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+
+        function showToast(message, type = 'info') {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Enter to continue/deploy
+            if (e.ctrlKey && e.key === 'Enter') {
+                if (currentStep === 1) goToStep2();
+                else if (currentStep === 2) deploy();
+            }
+            // Escape to go back
+            if (e.key === 'Escape') {
+                if (currentStep === 2) goToStep1();
+                else if (currentStep === 3) goToStep1();
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+
+        loadDeployments();
+        updatePreviewUrl();
+
+        // Auto-generate name
+        if (!domainInput.value) {
+            domainInput.value = generateRandomName();
+            updatePreviewUrl();
+        }
+
+        console.log('🚀 HTML to URL Deployer loaded!');
+        console.log(`📊 ${deployments.length} deployments in history`);
+
+        // Demo: Show how it works
+        setTimeout(() => {
+            showToast('💡 Upload HTML, set domain, deploy!', 'info');
+        }, 1000);
+    </script>
+
+</body>
+</html>            flex: 1;
             padding: 16px 20px;
             background: #0f0f1a;
             border: 2px solid #2d3748;
